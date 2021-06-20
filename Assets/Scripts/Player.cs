@@ -25,6 +25,14 @@ public class Player : MonoBehaviour
         Move();
         Jump();
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundlayer);
+        if (isGrounded)
+        {
+            anim.SetBool("jump", false);
+        }
+        else
+        {
+            anim.SetBool("jump", true);
+        }
     }
 
     void Move()
