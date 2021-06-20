@@ -9,6 +9,9 @@ public class Player : MonoBehaviour
     public float JumpForce = 8;
     private Rigidbody2D rig;
     public Animator anim;
+    bool isGrounded;
+    public Transform groundCheck;
+    public LayerMask groundlayer;
 
 
     void Start()
@@ -21,6 +24,7 @@ public class Player : MonoBehaviour
     {
         Move();
         Jump();
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundlayer);
     }
 
     void Move()
@@ -48,10 +52,9 @@ public class Player : MonoBehaviour
     }
     void Jump()
     {
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
             rig.AddForce(new Vector2(0f, JumpForce), ForceMode2D.Impulse);
         }
-
     }
 }
