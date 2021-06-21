@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     bool isGrounded;
     public Transform groundCheck;
     public LayerMask groundlayer;
+    public AudioSource AudioSourceJump;
 
 
     void Start()
@@ -63,6 +64,7 @@ public class Player : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             rig.AddForce(new Vector2(0f, JumpForce), ForceMode2D.Impulse);
+            AudioSourceJump.Play();
         }
     }
 }
