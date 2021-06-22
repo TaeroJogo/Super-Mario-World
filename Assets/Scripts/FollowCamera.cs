@@ -15,6 +15,7 @@ public class FollowCamera : MonoBehaviour
     {
         Vector3 temp = transform.position;
         temp.x = playerTransform.position.x;
+        temp.y = playerTransform.position.y;
 
         transform.position = temp;
     }
