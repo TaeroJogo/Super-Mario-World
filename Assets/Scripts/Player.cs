@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
 
+    public int coinValue = 1;
     public float Speed = 4;
     public float JumpForce = 8;
     private Rigidbody2D rig;
@@ -74,6 +75,7 @@ public class Player : MonoBehaviour
         {
             Destroy(other.gameObject);
             AudioSourceCoin.Play();
+            scoreManager.instance.changeScore(coinValue);
         }
     }
 }
