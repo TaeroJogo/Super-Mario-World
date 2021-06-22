@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public Transform groundCheck;
     public LayerMask groundlayer;
     public AudioSource AudioSourceJump;
+    public AudioSource AudioSourceCoin;
 
 
     void Start()
@@ -65,6 +66,14 @@ public class Player : MonoBehaviour
         {
             rig.AddForce(new Vector2(0f, JumpForce), ForceMode2D.Impulse);
             AudioSourceJump.Play();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.gameObject.CompareTag("coins"))
+        {
+            Destroy(other.gameObject);
+            AudioSourceCoin.Play();
         }
     }
 }
