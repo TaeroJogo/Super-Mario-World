@@ -32,7 +32,8 @@ public class FollowCamera : MonoBehaviour
     public void RestartCamera()
     {
         Vector3 temp = transform.position;
-        temp.x = playerTransform.position.x + 7;
-        temp.y = playerTransform.position.y + 5;
+        temp.x = -36;
+        temp.y = -5;
+        transform.position = temp;
     }
 }

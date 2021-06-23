@@ -130,11 +130,12 @@ public class Player : MonoBehaviour
 
     public void RestartGame()
     {
+        FollowCamera.RestartCamera();
         hasPassed = false;
         canMove = true;
-        FollowCamera.RestartCamera();
         scoreManager.RestartPoints();
         GameOverScreen.RestartButton();
+        WinScreen.PlayAgainButton();
         transform.position = new Vector3(-43.92f, -8.91f, 0f);
     }
 }

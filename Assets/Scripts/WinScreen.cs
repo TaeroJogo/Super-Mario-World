@@ -6,7 +6,6 @@ public class WinScreen : MonoBehaviour
 {
     public void Setup()
     {
-        print(4);
         gameObject.SetActive(true);
     }
 
