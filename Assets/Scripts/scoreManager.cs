@@ -8,11 +8,12 @@ public class scoreManager : MonoBehaviour
 
     public static scoreManager instance;
     public TextMeshProUGUI text;
-    int score; 
+    int score;
+    private Transform playerTransform;
 
     void Start()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
         }
@@ -22,5 +23,11 @@ public class scoreManager : MonoBehaviour
     {
         score += coinValue;
         text.text = "X" + score.ToString();
+    }
+
+    public void RestartPoints()
+    {
+        score = 0;
+        changeScore(0);
     }
 }

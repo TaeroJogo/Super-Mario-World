@@ -16,6 +16,14 @@ public class Player : MonoBehaviour
     public AudioSource AudioSourceJump;
     public AudioSource AudioSourceCoin;
 
+    public GameOverScreen GameOverScreen;
+    public scoreManager scoreManager;
+    public WinScreen WinScreen;
+    public FollowCamera FollowCamera;
+
+    public bool hasPassed = false;
+
+    private bool canMove = true;
 
     void Start()
     {
@@ -27,6 +35,9 @@ public class Player : MonoBehaviour
     {
         Move();
         Jump();
+        CheckWin();
+        PassScene();
+        CheckDeath();
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundlayer);
         if (isGrounded)
         {
@@ -40,24 +51,27 @@ public class Player : MonoBehaviour
 
     void Move()
     {
-        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0f, 0f);
-        transform.position += movement * Time.deltaTime * Speed;
-
-        if (Input.GetAxis("Horizontal") > 0f)
+        if (canMove)
         {
-            anim.SetBool("run", true);
-            transform.eulerAngles = new Vector3(0f, 0f, 0f);
-        }
+            Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0f, 0f);
+            transform.position += movement * Time.deltaTime * Speed;
 
-        if (Input.GetAxis("Horizontal") < 0f)
-        {
-            anim.SetBool("run", true);
-            transform.eulerAngles = new Vector3(0f, 180f, 0f);
-        }
+            if (Input.GetAxis("Horizontal") > 0f)
+            {
+                anim.SetBool("run", true);
+                transform.eulerAngles = new Vector3(0f, 0f, 0f);
+            }
 
-        if (Input.GetAxis("Horizontal") == 0f)
-        {
-            anim.SetBool("run", false);
+            if (Input.GetAxis("Horizontal") < 0f)
+            {
+                anim.SetBool("run", true);
+                transform.eulerAngles = new Vector3(0f, 180f, 0f);
+            }
+
+            if (Input.GetAxis("Horizontal") == 0f)
+            {
+                anim.SetBool("run", false);
+            }
         }
 
     }
@@ -70,12 +84,57 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.gameObject.CompareTag("coins"))
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("coins"))
         {
             Destroy(other.gameObject);
             AudioSourceCoin.Play();
             scoreManager.instance.changeScore(coinValue);
         }
+    }
+
+    void PassScene()
+    {
+        if (transform.position.x > 52 && transform.position.y > 0 && !hasPassed)
+        {
+            hasPassed = true;
+            transform.position = new Vector3(86.692f, -6.239f, 0f);
+        }
+    }
+
+    void CheckDeath()
+    {
+        if (!hasPassed && transform.position.y < -11.5)
+        {
+            GameOverScreen.Setup();
+            canMove = false;
+            transform.position = new Vector3(-43.92f, -8.91f, 0f);
+        }
+        if (hasPassed && transform.position.y < -7.3 && transform.position.y > -8)
+        {
+            GameOverScreen.Setup();
+            canMove = false;
+            transform.position = new Vector3(-43.92f, -8.91f, 0f);
+        }
+    }
+
+    void CheckWin()
+    {
+        if (transform.position.x > 173 && transform.position.y > 4.6)
+        {
+            canMove = false;
+            WinScreen.Setup();
+        }
+    }
+
+    public void RestartGame()
+    {
+        hasPassed = false;
+        canMove = true;
+        FollowCamera.RestartCamera();
+        scoreManager.RestartPoints();
+        GameOverScreen.RestartButton();
+        transform.position = new Vector3(-43.92f, -8.91f, 0f);
     }
 }
