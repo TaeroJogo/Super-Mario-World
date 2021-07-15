@@ -20,10 +20,12 @@ public class Player : MonoBehaviour
     public scoreManager scoreManager;
     public WinScreen WinScreen;
     public FollowCamera FollowCamera;
+    public DialogueController DialogueController;
 
     public bool hasPassed = false;
 
     private bool canMove = true;
+    public bool canJump = true;
 
     void Start()
     {
@@ -35,7 +37,7 @@ public class Player : MonoBehaviour
     {
         Move();
         Jump();
-        CheckWin();
+        StartCoroutine(CheckWin());
         PassScene();
         CheckDeath();
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundlayer);
@@ -77,7 +79,7 @@ public class Player : MonoBehaviour
     }
     void Jump()
     {
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump") && isGrounded && canJump)
         {
             rig.AddForce(new Vector2(0f, JumpForce), ForceMode2D.Impulse);
             AudioSourceJump.Play();
@@ -119,11 +121,14 @@ public class Player : MonoBehaviour
         }
     }
 
-    void CheckWin()
+    IEnumerator CheckWin()
     {
         if (transform.position.x > 173 && transform.position.y > 4.6)
         {
+            canJump = false;
             canMove = false;
+            DialogueController.Setup();
+            yield return new WaitForSeconds(3);
             WinScreen.Setup();
         }
     }
@@ -133,8 +138,10 @@ public class Player : MonoBehaviour
         FollowCamera.RestartCamera();
         hasPassed = false;
         canMove = true;
+        canJump = true;
         scoreManager.RestartPoints();
         GameOverScreen.RestartButton();
+        DialogueController.RestartButton();
         WinScreen.PlayAgainButton();
         transform.position = new Vector3(-43.92f, -8.91f, 0f);
     }
