@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     public bool hasPassed = false;
 
     private bool canMove = true;
+    public bool canJump = true;
 
     void Start()
     {
@@ -78,7 +79,7 @@ public class Player : MonoBehaviour
     }
     void Jump()
     {
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump") && isGrounded && canJump)
         {
             rig.AddForce(new Vector2(0f, JumpForce), ForceMode2D.Impulse);
             AudioSourceJump.Play();
@@ -124,6 +125,7 @@ public class Player : MonoBehaviour
     {
         if (transform.position.x > 173 && transform.position.y > 4.6)
         {
+            canJump = false;
             canMove = false;
             DialogueController.Setup();
             yield return new WaitForSeconds(3);
@@ -136,6 +138,7 @@ public class Player : MonoBehaviour
         FollowCamera.RestartCamera();
         hasPassed = false;
         canMove = true;
+        canJump = true;
         scoreManager.RestartPoints();
         GameOverScreen.RestartButton();
         DialogueController.RestartButton();
